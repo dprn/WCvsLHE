@@ -9,7 +9,7 @@ const Kern{T,n} = OffsetArrays.OffsetArray{T,n,Array{T,n}}
 
 include("lift.jl")
 
-export wc, lhe
+export wc, lhe, Params
 
 normalize(x::Array) = typeof(x)(x - ones(size(x))*minimum(x))/(maximum(x)-minimum(x))
 
@@ -127,5 +127,20 @@ end
 
 wc(I0, σμ, σw, λ; args...) = algo(I0, σμ, σw, λ, model = :wc; args...) 
 lhe(I0, σμ, σw, λ; args...) = algo(I0, σμ, σw, λ, model = :lhe; args...)
+
+# A useful shorthand:
+struct Params
+    σμ :: Float64
+    σw :: Float64
+    λ :: Float64
+    M :: Float64
+end
+σμ(p::Params) = p.σμ
+σw(p::Params) = p.σw
+λ(p::Params) = p.λ
+M(p::Params) = p.M
+
+wc(I, p::Params; args...) = wc(Float64.(I), σμ(p), σw(p), λ(p), M = M(p); args...)
+lhe(I, p::Params; args...) = lhe(Float64.(I), σμ(p), σw(p), λ(p), M = M(p); args...)
 
 end
