@@ -10,6 +10,11 @@ julia experiments.jl
 
 ## Usage
 
+To install, clone this repository via
+```
+git clone https://github.com/dprn/WCvsLHE.git
+```
+
 In order to import the package, do as usual
 
 ```julia
