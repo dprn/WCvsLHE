@@ -4,7 +4,7 @@
 
 In order to import the package, do as usual
 
-```
+```julia
 import Pkg
 Pkg.activate(path_to_WCvsLHE_folder)
 
@@ -30,7 +30,7 @@ Moreover, they have the following keyword arguments:
 
 ## Example
 
-```
+```julia
 img = load("myimage.png")
 x = Float64.(img)
 
