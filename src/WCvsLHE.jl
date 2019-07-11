@@ -130,10 +130,10 @@ lhe(I0, σμ, σw, λ; args...) = algo(I0, σμ, σw, λ, model = :lhe; args...)
 
 # A useful shorthand:
 struct Params
-    σμ :: Float64
-    σw :: Float64
-    λ :: Float64
-    M :: Float64
+    σμ :: Float64 # std deviation of local mean average
+    σw :: Float64 # std deviation of interaction kernel
+    λ :: Float64 # attachment to the data
+    M :: Float64 # the interaction weight is ν=1/(2M)
 end
 σμ(p::Params) = p.σμ
 σw(p::Params) = p.σw
