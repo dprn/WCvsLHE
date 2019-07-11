@@ -117,4 +117,4 @@ function batch_test(dict; args...)
 end
 
 mkpath("results")
-batch_test(illusions, lhe3d = false)
+batch_test(illusions, lhe3d = true)
