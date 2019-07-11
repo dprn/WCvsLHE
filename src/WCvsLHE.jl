@@ -54,6 +54,7 @@ end
 # Local Mean Average
 LMA(σμ::Real, I0::Array{T, 2}) where T = imfilter(I0, adapted_gaussian(σμ, I0))
 
+# Type to save the results
 struct Result{n}
     res :: Array{Float64, n}
     iter :: Int
@@ -65,6 +66,7 @@ tolerance(R::Result) = R.tol
 project(R::Result{3}, etc...) = Result{2}(project(R.res, etc...), iterations(R), tolerance(R))
 show(R::Result{2}) = Gray.(R[:,:])
 
+# Actual procedure
 function gradient_descent(I0::Array, W, λ::Real, lma::Array; Δt::Real = .15, threshold::Real = .01, max_iter::Int = 50, M::Real = 1, args...)
     # threshold : the iterations stops when two successive terms have a weighted L2 difference smaller than this quantity
     # max_iter: maximum number of iterations
