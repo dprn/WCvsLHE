@@ -1,18 +1,22 @@
 module WCvsLHE
 
-using Images
+using Images, ImageFiltering
 using FFTW
+import OffsetArrays
 
-include("cakes.jl")
+const Lift{T} = Array{T,3}
+const Kern{T,n} = OffsetArrays.OffsetArray{T,n,Array{T,n}}
+
+include("lift.jl")
 
 export wc, lhe
 
-normalize(x) = typeof(x)(x - ones(size(x))*minimum(x))/(maximum(x)-minimum(x))
+normalize(x::Array) = typeof(x)(x - ones(size(x))*minimum(x))/(maximum(x)-minimum(x))
 
-function project(Lf; normalized = true, args...) 
-    x = sum(Lf, dims = 3)[:,:,1]
+function project(F::Lift; normalized::Bool = true, args...) 
+    x = dropdims(sum(F, dims = 3), dims = 3)
     normalized ? x = normalize(x) : nothing
-    return Gray.(x)
+    return x
 end
 
 # Approximation of sigmoid for LHE
@@ -29,12 +33,12 @@ const c = reverse([-7.7456e+00,
 #Degree of the approximating polynomial
 const n = length(c)-1;  
 
-gr(i,img,ω) = imfilter(img.^i,ω)
-a(i,img)=sum( [(-1.)^(j-i+1)*c[j+1]*binomial(j,i)*Float64.(img).^(j-i) for j in i:n] )
-R(img,ω) = sum( [ a(i,img) .* gr(i,img,ω) for i in 0:n ] )
+gr(i::Int, img::Array, ω::Kern) = imfilter(img.^i,ω)
+a(i::Int, img::Array)=sum( [(-1.)^(j-i+1)*c[j+1]*binomial(j,i)*img.^(j-i) for j in i:n] )
+R(img::Array, ω::Kern) = sum( [ a(i,img) .* gr(i,img,ω) for i in 0:n ] )
 
 # Weight functions generation
-function adapted_gaussian(σ::Number, I; args...)
+function adapted_gaussian(σ::Real, I::Array)
     # Generates a Gaussian with variance σ and correct
     # dimensions w.r.t. to I
     if ndims(I) == 2
@@ -48,10 +52,20 @@ function adapted_gaussian(σ::Number, I; args...)
 end
 
 # Local Mean Average
-# if σμ is a tuple, it generates a Sum of Gaussians
-LMA(σμ, I0; args...) = imfilter(I0, adapted_gaussian(σμ, I0))
+LMA(σμ::Real, I0::Array{T, 2}) where T = imfilter(I0, adapted_gaussian(σμ, I0))
 
-function gradient_descent(I0, W, λ, lma; Δt = .15, threshold = .01, max_iter = 50, M=1, args...)
+struct Result{n}
+    res :: Array{Float64, n}
+    iter :: Int
+    tol :: Float64
+end
+Base.getindex(R::Result, etc...)  = getindex(R.res, etc...)
+iterations(R::Result) = R.iter
+tolerance(R::Result) = R.tol
+project(R::Result{3}, etc...) = Result{2}(project(R.res, etc...), iterations(R), tolerance(R))
+show(R::Result{2}) = Gray.(R[:,:])
+
+function gradient_descent(I0::Array, W, λ::Real, lma::Array; Δt::Real = .15, threshold::Real = .01, max_iter::Int = 50, M::Real = 1, args...)
     # threshold : the iterations stops when two successive terms have a weighted L2 difference smaller than this quantity
     # max_iter: maximum number of iterations
     next(Ik) = (1-(1+λ)Δt)Ik + (lma + W(Ik)/(2*M))Δt + λ*Δt*I0
@@ -66,14 +80,14 @@ function gradient_descent(I0, W, λ, lma; Δt = .15, threshold = .01, max_iter =
         i += 1
     end
 
-    (cur, i, diff(prec, cur))
+    Result{ndims(I0)}(cur, i, diff(prec, cur))
 end
 
-function algo(I0, σμ, σw, λ; algo_type = :planar, model = :wc, θs = 30, α = 5, args...) 
+function algo(I0::Array, σμ::Real, σw::Real, λ::Real; algo_type = :planar, model = :wc, θs::Int = 30, α::Int = 5, verbose::Bool = false, args...) 
 
 	if algo_type == :cortical
-		F0 = lift(Float64.(I0), θs; args...)
-		lma = lift(Float64.(LMA(σμ, I0)), θs; args...)
+		F0 = lift(I0, θs; args...)
+		lma = lift(LMA(σμ, I0), θs; args...)
 	elseif algo_type == :planar
 		F0 = copy(I0)
 		lma = LMA(σμ, I0)
@@ -103,10 +117,10 @@ function algo(I0, σμ, σw, λ; algo_type = :planar, model = :wc, θs = 30, α 
 	end
 
 	if algo_type == :cortical
-		return (project(res[1]; args...), res[2:end])
-	elseif algo_type == :planar
-		return res
+		res = project(res)
 	end	
+
+    verbose ? res : show(res)
 end
 
 wc(I0, σμ, σw, λ; args...) = algo(I0, σμ, σw, λ, model = :wc; args...) 

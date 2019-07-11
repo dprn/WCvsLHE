@@ -3,10 +3,10 @@
 # ================================
 
 # Cut-off function in the frequency plane
-mn(ρ; t=1, N = 12) = exp(-ρ^2/t)*sum([(ρ^2/t)^k/factorial(k) for k=0:N])
+mn(ρ::Real; t=1, N = 12) = exp(-ρ^2/t)*sum([(ρ^2/t)^k/factorial(k) for k=0:N])
 
 # B-spline for the radial part
-function b_spline(x,t1,t2,t3,t4)
+function b_spline(x::T,t1::T,t2::T,t3::T,t4::T) where T<:Real
     if x >= t1 && x<t2
         return (x-t1)^2/(t3-t1)/(t2-t1)
     elseif x >= t2 && x<t3
@@ -17,17 +17,16 @@ function b_spline(x,t1,t2,t3,t4)
         return 0
     end
 end
-b_spline(x) = b_spline(x,-1,-.5,.5,1)
+b_spline(x) = b_spline(x,-1.,-.5,.5,1.)
 
 # Fourier part of the cake
-function cake(ϕ, θs; m = 100, bw = 5, oriented = false, args...)
+function cake(ϕ::Real, θs::Int; m::Int = 100, bw::Real = 5, oriented::Bool = false, args...)
     # ϕ = orientation of the cake
     # m = the cake wavelet will be an m x m matrix
     # θs = angular resolution
     # bw = bandwith at which to cut
     @assert m%2 == 0
     
-    # x(i) = 2bw*(i-1)/(m-1) - bw
     x(i) = 2bw*(i-1)/m - bw
     ρ(i,j) = sqrt(x(i)^2 +x(j)^2)
     θ(i,j) = atan(x(j),x(i))
@@ -40,7 +39,7 @@ function cake(ϕ, θs; m = 100, bw = 5, oriented = false, args...)
     end
 end
 
-function lift(img, θs ; m = 100, args...)
+function lift(img::Array{T,2}, θs::Int = 30 ; m::Int = 100, args...) where T<:Real
     # θs = angular resolution of the cake wvlts
     # m = resolution of the kernel, if 0 it is chosen as the size of the image 
     # (to have perfect reconstruction) 
