@@ -104,7 +104,7 @@ function algo(I0::Array, σμ::Real, σw::Real, λ::Real; algo_type = :planar, m
             elseif x > 1/2 + 1/α
                 y = -1/2
             else
-                y = (x - 1/2)*α/2
+                y = (1/2-x)*α/2
             end
             y
         end
