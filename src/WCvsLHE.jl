@@ -100,11 +100,11 @@ function algo(I0::Array, σμ::Real, σw::Real, λ::Real; algo_type = :planar, m
 	if model == :wc
         function σ(x)
             if x < 1/2 - 1/α
-                y = 1/2
+                y = 1
             elseif x > 1/2 + 1/α
-                y = -1/2
+                y = -1
             else
-                y = (1/2-x)*α/2
+                y = (1/2-x)*α
             end
             y
         end
