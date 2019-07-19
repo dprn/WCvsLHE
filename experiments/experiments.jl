@@ -46,49 +46,49 @@ end
 
 # Illusion parameters
 illusions = Dict(
-"white" => Dict(:WC2D => Params(10,20,.7,.7),
+"white" => Dict(:WC2D => Params(10,20,.7,1.4),
 				:LHE2D => Params(10,50,.7,1),
-				:WC3D => Params(20,30,.7,.7),
+				:WC3D => Params(20,30,.7,1.4),
 				:LHE3D => Params(2, 50,.7,1))
 
-, "brightness" => Dict(:WC2D => Params(2,10,.7,.7),
+, "brightness" => Dict(:WC2D => Params(2,10,.7,1.4),
 				:LHE2D => Params(2,10,.7,1),
-				:WC3D => Params(2,10,.7,.7),
+				:WC3D => Params(2,10,.7,1.4),
 				:LHE3D => Params(2, 10,.7,1))
 
-, "checkerboard" => Dict(:WC2D => Params(10,70,.7,.7),
+, "checkerboard" => Dict(:WC2D => Params(10,70,.7,1.4),
 				:LHE2D => Params(10,70,.7,1),
-				:WC3D => Params(10,70,.7,.7),
+				:WC3D => Params(10,70,.7,1.4),
 				:LHE3D => Params(10,70,.7,1))
 
-, "chevreul" => Dict(:WC2D => Params(2, 5,.7,.5),
+, "chevreul" => Dict(:WC2D => Params(2, 5,.7,1),
 				:LHE2D => Params(2,10,.7,1),
-				:WC3D => Params(2, 40,.5,.5),
+				:WC3D => Params(2, 40,.5,1),
 				:LHE3D => Params(5,7,.7,1))
 
-, "chevreulCanc" => Dict(:WC2D => Params(2, 20,.5,.7),
+, "chevreulCanc" => Dict(:WC2D => Params(2, 20,.5,1.4),
 				:LHE2D => Params(2, 20,.5,1),
-				:WC3D => Params(2, 20,.5,.7),
+				:WC3D => Params(2, 20,.5,1.4),
 				:LHE3D => Params(2, 20,.5,1))
 
-, "dungeon" => Dict(:WC2D => Params(6,10,.7,.7),
+, "dungeon" => Dict(:WC2D => Params(6,10,.7,1.4),
 				:LHE2D => Params(5,40,.7,1),
-				:WC3D => Params(2,50,.7,.7),
+				:WC3D => Params(2,50,.7,1.4),
 				:LHE3D => Params(5,50,.7,1))
 
-, "gratings" => Dict(:WC2D => Params(2,6,.7,.5),
+, "gratings" => Dict(:WC2D => Params(2,6,.7,1),
 				:LHE2D => Params(2,6,.7,1),
-				:WC3D => Params(2,6,.7,.5),
+				:WC3D => Params(2,6,.7,1),
 				:LHE3D => Params(2, 6,.7,1))
 
-, "hong_shevell" => Dict(:WC2D => Params(5,20,.7,.5),
+, "hong_shevell" => Dict(:WC2D => Params(5,20,.7,1),
 				:LHE2D => Params(5,.5,.7,1),
-				:WC3D => Params(10,30,.7,.5),
+				:WC3D => Params(10,30,.7,1),
 				:LHE3D => Params(10,30,.7,1))
 
-, "luminance" => Dict(:WC2D => Params(2,6,.7,.5),
+, "luminance" => Dict(:WC2D => Params(2,6,.7,1),
 				:LHE2D => Params(2,6,.7,1),
-				:WC3D => Params(2,6,.7,.5),
+				:WC3D => Params(2,6,.7,1),
 				:LHE3D => Params(2,6,.7,1))
 
 , "poggendorff" => Dict(:WC2D => Params(3,10,.5,1),
