@@ -1,4 +1,3 @@
-import Plots
 using Images
 
 import Pkg
