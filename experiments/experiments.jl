@@ -22,7 +22,6 @@ function test(name, params; lhe3d = false, dest = name)
 	wc2d = wc(img, params[:WC2D], algo_type = :planar) |> normalize
 	print(string("LHE2D "))
 	lhe2d = lhe(img, params[:LHE2D], algo_type = :planar) |> normalize
-	# plot2d = plot_comparison_middle(img,wc2d,lhe2d, ylims=[.15,.85], linewidth=1.5 ,labels = ["original", "wc2D", "lhe2D"], linecolor = ["blue" "red" "green"], linestyle = [:dot :solid :solid])  
 	print(string("WC3D "))
 	wc3d = wc(img, params[:WC3D], algo_type = :cortical) |> normalize
 
@@ -30,9 +29,7 @@ function test(name, params; lhe3d = false, dest = name)
 	if lhe3d
 		print(string("LHE3D "))
 		lhe3d = lhe(img, params[:LHE3D], algo_type = :cortical) |> normalize
-		# plot3d = plot_comparison_middle(img,wc3d,lhe3d, ylims=[.15,.85], linewidth=1.5 ,labels = ["original", "wc3D", "lhe3D"], linecolor = ["blue" "red" "green"], linestyle = [:dot :solid :solid])  
 		save(string("results/",dest,"_lhe3d.png"), map(clamp01nan,lhe3d))
-		# save(string("results/",dest,"_p3d.png"), plot3d)
 	end
 
 	println("\n\tSaving.")
@@ -41,7 +38,6 @@ function test(name, params; lhe3d = false, dest = name)
 	save(string("results/",dest,"_wc2d.png"), map(clamp01nan, wc2d))
 	save(string("results/",dest,"_lhe2d.png"), map(clamp01nan, lhe2d))
 	save(string("results/",dest,"_wc3d.png"), map(clamp01nan, wc3d))
-	# save(string("results/",dest,"_p2d.png"), plot2d)
 end
 
 # Illusion parameters
