@@ -96,10 +96,10 @@ illusions = Dict(
 				:WC3D => Params(3,10,.5,1),
 				:LHE3D => Params(3,10,.5,1))
 
-# , "tilt" => Dict(:WC2D => Params(15,20,.7,1),
-# 				:LHE2D => Params(15,20,.7,1),
-# 				:WC3D => Params(15,20,.7,1),
-# 				:LHE3D => Params(15,20,.7,1))
+, "tilt" => Dict(:WC2D => Params(15,20,.7,1),
+				:LHE2D => Params(15,20,.7,1),
+				:WC3D => Params(15,20,.7,1),
+				:LHE3D => Params(15,20,.7,1))
 )
 
 function batch_test(dict; args...)
@@ -114,6 +114,9 @@ function batch_test(dict; args...)
 
 	test("dungeon1", dict["dungeon"]; args...)
 	test("dungeon2", dict["dungeon"]; args...)
+
+	test("tilt1", dict["tilt"]; args...)
+	test("tilt2", dict["tilt"]; args...)
 end
 
 mkpath("results")
