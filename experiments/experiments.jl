@@ -22,12 +22,12 @@ function test(name, params; lhe3d = false, dest = name)
 	print(string("LHE2D "))
 	lhe2d = lhe(img, params[:LHE2D], algo_type = :planar) |> normalize
 	print(string("WC3D "))
-	wc3d = wc(img, params[:WC3D], algo_type = :cortical, θs = 15) |> normalize
+	wc3d = wc(img, params[:WC3D], algo_type = :cortical) |> normalize
 
 
 	if lhe3d
 		print(string("LHE3D "))
-		lhe3d = lhe(img, params[:LHE3D], algo_type = :cortical, θs = 15) |> normalize
+		lhe3d = lhe(img, params[:LHE3D], algo_type = :cortical) |> normalize
 		save(string("results/",dest,"_lhe3d.png"), map(clamp01nan,lhe3d))
 	end
 
@@ -115,4 +115,4 @@ function batch_test(dict; args...)
 end
 
 mkpath("results")
-batch_test(illusions, lhe3d = false)
+batch_test(illusions, lhe3d = true)
